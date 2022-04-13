@@ -279,14 +279,29 @@ function getLocalData() {
     const localDataMarker = localStorage.getItem("pinMarker");
     const localDataTreasure = localStorage.getItem("treasureListItem");
     console.log(localDataMarker);
+    console.log(localDataTreasure);
+    let output = ``;
 
     //should go through array of coordinates and create a new marker - says there is invalid latlng object
     for (aLocalDataMarker of localDataMarker) {
-        var latCoor = aLocalDataMarker[0];
-        var lonCoor = aLocalDataMarker[1];
+        var lat = aLocalDataMarker[0].latlng.lat;
+        var lon = aLocalDataMarker[1].latlng.lng;
 
-        var lat = parseFloat(latCoor);
-        var lon = parseFloat(lonCoor);
-        theMarker = L.marker([latCoor, lonCoor]).addTo(map);
+        //var lat = parseFloat(latCoor);
+        //var lon = parseFloat(lonCoor);
+        theMarker = L.marker([lat, lon]).addTo(map);
+    }
+    
+    //should add the data from local storage to the treasure list
+    for (aLocalDataTreasure of localDataTreasure){
+        output = `${aLocalDataTreasure.value}`;
+        const newTreasure = document.createElement('ion-item');
+        newTreasure.textContent = output;
+
+        //adding new treasure to the list on the page
+        treasureList.appendChild(newTreasure);
+
+        //saving the treasure to an array of treasures
+        treasures.push(newTreasure.textContent);
     }
 }
