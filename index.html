@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pirate Tech</title>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+    <!-- IONIC -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+
+    <!-- LEAFLET -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <!-- MY SCRIPT -->
+    <script src="app.js" defer></script>
+
+</head>
+
+<style>
+    #map {
+        height: 400px;
+    }
+
+    .title {
+        padding: 4% 0 5%;
+    }
+
+    #btn-add-treasure {
+        margin: 20px 0px;
+    }
+
+    .compass {
+        position: relative;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        margin: auto;
+        padding-top: 2%;
+        padding-bottom: 2%;
+    }
+
+    .compass>.arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-style: solid;
+        border-width: 30px 20px 0 20px;
+        border-color: red transparent transparent transparent;
+        z-index: 1;
+    }
+
+    .compass>.compass-circle,
+    .compass>.my-point {
+        position: absolute;
+        width: 80%;
+        height: 80%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.1s ease-out;
+        background: url(https://cdn.onlinewebfonts.com/svg/img_467023.png) center no-repeat;
+        background-size: contain;
+    }
+
+    .compass>.my-point {
+        opacity: 0;
+        width: 20%;
+        height: 20%;
+        background: rgb(8, 223, 69);
+        border-radius: 50%;
+        transition: opacity 0.5s ease-out;
+    }
+
+    .start-btn {
+        margin: 2%;
+    }
+
+    a {
+        padding: 0 20px;
+        color: black;
+    }
+
+    .removeItemButtons {
+        margin-right: 0;
+        padding-right: 0;
+        float: right;
+
+    }
+</style>
+
+<body>
+    <ion-app>
+        <ion-tabs id="tb-app">
+
+            <!-- Tab Three - HOME -->
+            <ion-tab tab="home">
+                <ion-header>
+                    <ion-toolbar color="warning">
+                        <ion-title> Pirate Tech </ion-title>
+
+                        <a href="weather.html" slot="end">
+                            <h1>
+                                <ion-icon name="rainy-outline"></ion-icon>
+                            </h1>
+                        </a>
+                    </ion-toolbar>
+                </ion-header>
+
+                <ion-content fullscreen class="ion-padding">
+                    <h1> Welcome to PirateTech!</h1>
+
+                    <ion-card>
+                        <ion-card-content>
+                            <ion-card-label>
+                                This app contains all essentials a modern pirate needs - like a treasure map, dynamic
+                                list of alcohols on board and weather forecast!
+                                <br><br>
+                                Check it out yourself!
+
+                            </ion-card-label>
+                        </ion-card-content>
+                    </ion-card>
+                </ion-content>
+            </ion-tab>
+
+            <!-- Tab One - COMPASS -->
+            <ion-tab tab="compass">
+                <ion-header>
+                    <ion-toolbar color="warning">
+                        <ion-title> Compass </ion-title>
+
+                        <a href="weather.html" slot="end">
+                            <h1>
+                                <ion-icon name="rainy-outline"></ion-icon>
+                            </h1>
+                        </a>
+                    </ion-toolbar>
+                </ion-header>
+
+                <ion-content fullscreen>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <div class="compass">
+                                    <div class="arrow"></div>
+                                    <div class="compass-circle"></div>
+                                    <div class="my-point"></div>
+                                </div>
+                            </ion-col>
+                        </ion-row>
+
+                        <br><br>
+
+                        <ion-row>
+                            <ion-col></ion-col>
+                            <ion-col>
+                                <ion-button class="start-btn" color="warning">Start compass</ion-button>
+                            </ion-col>
+                            <ion-col></ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-content>
+            </ion-tab>
+
+            <!-- Tab Two - LIST -->
+            <ion-tab tab="list">
+                <ion-header>
+                    <ion-toolbar color="warning">
+                        <ion-title> Essentials </ion-title>
+
+                        <a href="weather.html" slot="end">
+                            <h1>
+                                <ion-icon name="rainy-outline"></ion-icon>
+                            </h1>
+                        </a>
+                    </ion-toolbar>
+                </ion-header>
+
+                <ion-content fullscreen>
+                    <!-- Grid for better layout and more control over the alignment -->
+                    <!-- Header -->
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <ion-title class="ion-text-center" style="padding: 10px">
+                                    Check and update <br> your essentials!
+                                </ion-title>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+
+                    <!-- Items on card and a grid -->
+                    <ion-card>
+                        <ion-card-content>
+                            <!-- List of items -->
+                            <ion-list id="list-output-essentials">
+
+                                <!-- List Item Rum -->
+                                <ion-item class="list-item">
+
+                                    <ion-grid>
+                                        <ion-row>
+                                            <ion-col size="7">
+                                                Bottles of Rum:
+                                            </ion-col>
+                                            <ion-col>
+                                                <ion-label class="lbls-amount">32</ion-label>
+                                                <ion-input type="number" class="lbl-item-amount"></ion-input>
+                                            </ion-col>
+                                            <ion-col>
+                                                <ion-fab-button class="removeItemButtons" color="warning" size="small">
+                                                    - </ion-fab-button>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-grid>
+
+
+                                    <!-- Button to control the amount (+1)-->
+                                </ion-item>
+
+                                <!-- List Item Beer -->
+                                <ion-item class="list-item">
+                                    <ion-grid>
+                                        <ion-row>
+                                            <ion-col size="7">
+                                                Kegs of Beer:
+                                            </ion-col>
+                                            <ion-col>
+                                                <ion-label class="lbls-amount">6</ion-label>
+                                                <ion-input type="number" class="lbl-item-amount"></ion-input>
+                                            </ion-col>
+                                            <ion-col>
+                                                <ion-fab-button class="removeItemButtons" color="warning" size="small">
+                                                    - </ion-fab-button>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-grid>
+
+
+                                </ion-item>
+                            </ion-list>
+
+                            <!-- Adding a New Item and Amount -->
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col size="8">
+                                        <ion-label position="floating"> Add a new item </ion-label>
+                                        <ion-input type="string" id="lbl-item"></ion-input>
+                                    </ion-col>
+
+                                    <ion-col>
+                                        <ion-label position="floating">Amount</ion-label>
+                                        <ion-input type="number" id="lbl-item-amount">
+                                        </ion-input>
+                                    </ion-col>
+                                </ion-row>
+
+                                <ion-button expand="block" id="btn-add-item" color="warning">
+                                    Add Item
+                                </ion-button>
+                                <br>
+                                <ion-button expand="block" id="btn-update-list" color="warning">
+                                    Update List
+                                </ion-button>
+                            </ion-grid>
+
+                        </ion-card-content>
+                    </ion-card>
+                </ion-content>
+            </ion-tab>
+
+            <!-- Tab Four - MAP -->
+            <ion-tab tab="treasureMap">
+                <ion-header>
+                    <ion-toolbar color="warning">
+                        <ion-title> Treasure Map </ion-title>
+
+                        <a href="weather.html" slot="end">
+                            <h1>
+                                <ion-icon name="rainy-outline"></ion-icon>
+                            </h1>
+                        </a>
+                    </ion-toolbar>
+                </ion-header>
+
+                <ion-content fullscreen class="ion-padding">
+                    <!-- Grid for better layout and more control over the alignment -->
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <ion-title class="title ion-text-center">
+                                    Burry and Dig Up <br>
+                                    All Your Treasures!
+                                </ion-title>
+                            </ion-col>
+                        </ion-row>
+
+                        <ion-row>
+                            <ion-col>
+                                <ion-button expand="block" id="btn-get" color="warning">Retireve Saved Data</ion-button>
+                            </ion-col>
+                        </ion-row>
+
+                    </ion-grid>
+
+                    <div id="map"></div>
+
+                    <!-- List of Burried Treasures -->
+                    <ion-card>
+                        <ion-card-content>
+                            <ion-card-header>
+                                <ion-title class="ion-text-center">
+                                    Add Burried Treasure <br> to the List
+                                </ion-title>
+                            </ion-card-header>
+
+
+                            <ion-list>
+                                <ion-item>
+                                    <ion-label position="floating">Place</ion-label>
+                                    <ion-input type="string" id="lbl-place"></ion-input>
+                                </ion-item>
+
+                                <ion-item>
+                                    <ion-label position="floating">Type of Treasure</ion-label>
+                                    <ion-input type="string" id="lbl-type"></ion-input>
+                                </ion-item>
+
+                                <ion-button expand="block" id="btn-add-treasure" color="warning">Add Treasure
+                                </ion-button>
+                                <ion-button expand="block" id="btn-save" color="warning">Save All Changes</ion-button>
+                            </ion-list>
+
+                            <ion-title>
+                                Your Treasures
+                            </ion-title>
+
+                            <ion-list id="list-output"></ion-list>
+
+                        </ion-card-content>
+                    </ion-card>
+                </ion-content>
+            </ion-tab>
+
+
+            <!-- Tabs Control -->
+            <ion-tab-bar slot="bottom" color="warning">
+
+                <!-- Home -->
+                <ion-tab-button tab="home">
+                    <ion-label>
+                        <h2>
+                            <ion-icon name="home"></ion-icon>
+                        </h2>
+                        Home
+                    </ion-label>
+                </ion-tab-button>
+
+                <!-- Compass -->
+
+                <ion-tab-button tab="compass">
+                    <ion-label>
+                        <h2>
+                            <ion-icon name="compass"></ion-icon>
+                        </h2>
+                        Compass
+                    </ion-label>
+                </ion-tab-button>
+
+                <!-- Essentials -->
+
+                <ion-tab-button tab="list">
+                    <ion-label>
+                        <h2>
+                            <ion-icon name="list"></ion-icon>
+                        </h2>
+                        Essentials
+                    </ion-label>
+                </ion-tab-button>
+
+                <!-- Treasure Map -->
+
+                <ion-tab-button tab="treasureMap">
+                    <ion-label>
+                        <h2>
+                            <ion-icon name="map"></ion-icon>
+                        </h2>
+                        Treasure Map
+                    </ion-label>
+                </ion-tab-button>
+            </ion-tab-bar>
+
+        </ion-tabs>
+    </ion-app>
+
+</body>
+
+</html>
