@@ -103,6 +103,7 @@ essentialsList.addEventListener('click', function(e){
     }
 })
 
+//when clicked element has a class "removeItemButtons", remove the item
 $(document).on('click', '.removeItemButtons', essentialsRemove);
 
 function essentialsAdd() {
