@@ -92,19 +92,21 @@ const itemAmountInputs = document.getElementsByClassName("lbl-item-amount");
 const essentialsList = document.getElementById("list-output-essentials");
 const btnUpdateList = document.getElementById("btn-update-list");
 const fabRemove = document.getElementsByClassName("removeItemButtons");
+const btnSaveItem = document.getElementById("btn-save-list");
+const itemNames = document.getElementsByClassName("item-names");
+
+const itemAmountLabelArray = [];
+const itemNamesArray = [];
 
 //adding event listeners to buttons
 btnAddItem.addEventListener('click', essentialsAdd);
 btnUpdateList.addEventListener('click', essentialsUpdate);
-essentialsList.addEventListener('click', function(e){
-    if (e.target.classList.contains('removeItemButtons')){
-        $(this).closest('.list-item').remove();   
-        console.log(e);
-    }
-})
-
+btnSaveItem.addEventListener('click', saveListToLocal);
 //when clicked element has a class "removeItemButtons", remove the item
 $(document).on('click', '.removeItemButtons', essentialsRemove);
+
+//on load get from local
+getListFromLocal();
 
 function essentialsAdd() {
     let output = ``;
@@ -118,6 +120,7 @@ function essentialsAdd() {
 
         //creating ionic elements to add 
         const newListItem = document.createElement('ion-item');
+        const newItemLabel = document.createElement("ion-label");
         const gridElem = document.createElement('ion-grid');
         const rowElem = document.createElement('ion-row');
         const colElem1 = document.createElement('ion-col');
@@ -128,13 +131,14 @@ function essentialsAdd() {
         const fabButton = document.createElement('ion-fab-button');
 
         //setting text content
-        colElem1.textContent = output;
+        newItemLabel.textContent = output;
         lblAmount.textContent = `${itemAmountInput.value}`;
         fabButton.textContent = "-";
 
         //adding needed classes
+        newItemLabel.classList.add("item-names");
         lblAmount.classList.add("lbls-amount");
-        newListItem.classList.add("lbl-amount")
+        newListItem.classList.add("lbl-amount");
         amountInput.classList.add("lbl-item-amount");
         fabButton.classList.add("removeItemButtons");
 
@@ -151,6 +155,7 @@ function essentialsAdd() {
         newListItem.appendChild(gridElem);
         gridElem.appendChild(rowElem);
         rowElem.appendChild(colElem1);
+        colElem1.appendChild(newItemLabel);
         rowElem.appendChild(colElem2);
         colElem2.appendChild(lblAmount);
         colElem2.appendChild(amountInput);
@@ -168,17 +173,107 @@ function essentialsUpdate() {
     //if input value is non-empty, change the value of the label to one 
     //that assigned input form has
     for (let i = 0; i < itemAmountLabel.length; i++) {
-         if (itemAmountInputs[i].value > 0){
+        if (itemAmountInputs[i].value > 0) {
             itemAmountLabel[i].textContent = `${itemAmountInputs[i].value}`;
             //clear value of the input form
             itemAmountInputs[i].value = "";
         }
-    }    
+    }
 }
 
 //remove a list element corresponding to the clicked button
 function essentialsRemove() {
-    $(this).closest('.list-item').remove();    
+    $(this).parents("ion-item").remove();
+}
+
+function saveListToLocal() {
+
+    for (anItemAmountLabel of itemAmountLabel){
+        itemAmountLabelArray.push(anItemAmountLabel.textContent);
+    }
+
+    for (anItemName of itemNames){
+        itemNamesArray.push(anItemName.textContent);
+    }
+
+    localStorage.setItem("itemLabel", itemAmountLabelArray);
+    localStorage.setItem("itemAmount", itemNamesArray);
+    console.log("label Array: " + itemAmountLabelArray);
+    console.log("Name array : " + itemNamesArray);
+}
+
+function getListFromLocal() {
+    const localDataLabel = localStorage.getItem("itemLabel");
+    const localDataAmount = localStorage.getItem("itemAmount");
+    console.log(localDataLabel);
+    console.log(localDataAmount);
+
+    let labelOutput = ``;
+    let amountOutput =``;
+
+    
+    var localAmountsArray = localDataAmount.split(',');
+    var localLabelsArray = localDataLabel.split(',');
+
+    console.log(localAmountsArray +","+ localLabelsArray);
+    
+    for (let i = 0; i < localAmountsArray.length; i++) {
+        labelOutput = `${localLabelsArray[i]}`;
+        amountOutput = `${localAmountsArray[i]}`;
+
+        //creating ionic elements to add 
+        const newListItem = document.createElement('ion-item');
+        const newItemLabel = document.createElement("ion-label");
+        const gridElem = document.createElement('ion-grid');
+        const rowElem = document.createElement('ion-row');
+        const colElem1 = document.createElement('ion-col');
+        const colElem2 = document.createElement('ion-col');
+        const colElem3 = document.createElement('ion-col');
+        const lblAmount = document.createElement('ion-label');
+        const amountInput = document.createElement('ion-input');
+        const fabButton = document.createElement('ion-fab-button');
+
+        //setting text content
+        newItemLabel.textContent = labelOutput;
+        lblAmount.textContent = amountOutput;
+        fabButton.textContent = "-";
+
+        //adding needed classes
+        newItemLabel.classList.add("item-names");
+        lblAmount.classList.add("lbls-amount");
+        newListItem.classList.add("lbl-amount");
+        amountInput.classList.add("lbl-item-amount");
+        fabButton.classList.add("removeItemButtons");
+
+        $(fabButton).click(essentialsRemove);
+
+        //adding settings
+        colElem1.size = "7";
+        amountInput.type = "number";
+        fabButton.color = "warning";
+        fabButton.size = "small";
+
+        //adding ionic elements to appropriate parents
+        essentialsList.appendChild(newListItem);
+        newListItem.appendChild(gridElem);
+        gridElem.appendChild(rowElem);
+        rowElem.appendChild(colElem1);
+        colElem1.appendChild(newItemLabel);
+        rowElem.appendChild(colElem2);
+        colElem2.appendChild(lblAmount);
+        colElem2.appendChild(amountInput);
+        rowElem.appendChild(colElem3);
+        colElem3.appendChild(fabButton);
+
+
+        //console.log(localTreasureArray[i]);
+       // output = `${localLabelsArray[i]}`;
+       // const newTreasure = document.createElement('ion-item');
+       // newTreasure.textContent = output;
+
+        //adding new treasure to the list on the page
+        //treasureList.appendChild(newTreasure);
+    }
 }
 //----------------------HOME----------------------
 
@@ -266,7 +361,7 @@ function saveChangesToLocal() {
     //save them to the local storage
     if (markers.length > 0 && treasures.length > 0 && markers.length === treasures.length) {
         localStorage.setItem("pinMarker", markers);
-        localStorage.setItem("treasureListItem", treasures);
+        localStorage.setItem("treasureListItem", JSON.stringify(treasures));
     }
     // if there is an unequal amount of markers and list items or they are empty, console log 
     // to input pins and values 
@@ -281,8 +376,23 @@ function getLocalData() {
     const localDataTreasure = localStorage.getItem("treasureListItem");
     console.log(localDataMarker);
     console.log(localDataTreasure);
+
     let output = ``;
 
+    console.log(localDataTreasure);
+    var localTreasureArray = localDataTreasure.split(',');
+
+    for (let i = 0; i < localTreasureArray.length; i++) {
+        console.log(localTreasureArray[i]);
+        output = `${localTreasureArray[i]}`;
+        const newTreasure = document.createElement('ion-item');
+        newTreasure.textContent = output;
+
+        //adding new treasure to the list on the page
+        treasureList.appendChild(newTreasure);
+    }
+
+    //treasureList.write("<ion-item>" + JSON.stringify(localDataTreasure) + "</ion-item>");
     //should go through array of coordinates and create a new marker - says there is invalid latlng object
     for (aLocalDataMarker of localDataMarker) {
         var lat = aLocalDataMarker[0].latlng.lat;
@@ -291,18 +401,5 @@ function getLocalData() {
         //var lat = parseFloat(latCoor);
         //var lon = parseFloat(lonCoor);
         theMarker = L.marker([lat, lon]).addTo(map);
-    }
-    
-    //should add the data from local storage to the treasure list
-    for (aLocalDataTreasure of localDataTreasure){
-        output = `${aLocalDataTreasure.value}`;
-        const newTreasure = document.createElement('ion-item');
-        newTreasure.textContent = output;
-
-        //adding new treasure to the list on the page
-        treasureList.appendChild(newTreasure);
-
-        //saving the treasure to an array of treasures
-        treasures.push(newTreasure.textContent);
     }
 }

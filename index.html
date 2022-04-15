@@ -125,16 +125,17 @@
                 </ion-header>
 
                 <ion-content fullscreen class="ion-padding">
-                    <h1> Welcome to PirateTech!</h1>
+                    <h1> Ahoy t' PirateTech!</h1>
 
                     <ion-card>
                         <ion-card-content>
                             <ion-card-label>
-                                This app contains all essentials a modern pirate needs - like a treasure map, dynamic
-                                list of alcohols on board and weather forecast!
-                                <br><br>
-                                Check it out yourself!
-
+                                Avast ye, me hearties! This app contains everythin' a brainy/prudent/smart seadog needs
+                                - like yer treasure map, dynamic list o' booze on board and weather forecast so ye can
+                                batten down the hatches in advance!
+    
+                                <ion-img src="steering_wheel.png" style="margin-top:10%; margin:5%">
+                                </ion-img>
                             </ion-card-label>
                         </ion-card-content>
                     </ion-card>
@@ -172,7 +173,7 @@
                         <ion-row>
                             <ion-col></ion-col>
                             <ion-col>
-                                <ion-button class="start-btn" color="warning">Start compass</ion-button>
+                                <ion-button class="start-btn" color="warning">Steady as she goes!</ion-button>
                             </ion-col>
                             <ion-col></ion-col>
                         </ion-row>
@@ -201,7 +202,7 @@
                         <ion-row>
                             <ion-col>
                                 <ion-title class="ion-text-center" style="padding: 10px">
-                                    Check and update <br> your essentials!
+                                    Check yer essentials <br> before settin' sail<br> at the birney deep
                                 </ion-title>
                             </ion-col>
                         </ion-row>
@@ -219,7 +220,9 @@
                                     <ion-grid>
                                         <ion-row>
                                             <ion-col size="7">
-                                                Bottles of Rum:
+                                                <ion-label class="item-names">
+                                                    Bottles of Rum:
+                                                </ion-label>                                              
                                             </ion-col>
                                             <ion-col>
                                                 <ion-label class="lbls-amount">32</ion-label>
@@ -241,7 +244,9 @@
                                     <ion-grid>
                                         <ion-row>
                                             <ion-col size="7">
-                                                Kegs of Beer:
+                                                <ion-label class="item-names">
+                                                    Kegs of Beer:
+                                                </ion-label>                                                
                                             </ion-col>
                                             <ion-col>
                                                 <ion-label class="lbls-amount">6</ion-label>
@@ -280,6 +285,10 @@
                                 <ion-button expand="block" id="btn-update-list" color="warning">
                                     Update List
                                 </ion-button>
+                                <br>
+                                <ion-button expand="block" id="btn-save-list" color="warning">
+                                    Save List
+                                </ion-button>
                             </ion-grid>
 
                         </ion-card-content>
@@ -307,12 +316,11 @@
                         <ion-row>
                             <ion-col>
                                 <ion-title class="title ion-text-center">
-                                    Burry and Dig Up <br>
-                                    All Your Treasures!
+                                    Bury an' dig up yer bounty
                                 </ion-title>
                             </ion-col>
                         </ion-row>
-
+                        
                         <ion-row>
                             <ion-col>
                                 <ion-button expand="block" id="btn-get" color="warning">Retireve Saved Data</ion-button>
@@ -328,7 +336,7 @@
                         <ion-card-content>
                             <ion-card-header>
                                 <ion-title class="ion-text-center">
-                                    Add Burried Treasure <br> to the List
+                                    Add Yer Precious Booty <br> Whereabouts To Thy List
                                 </ion-title>
                             </ion-card-header>
 
@@ -350,7 +358,7 @@
                             </ion-list>
 
                             <ion-title>
-                                Your Treasures
+                                Yer Treasures, Captain
                             </ion-title>
 
                             <ion-list id="list-output"></ion-list>
